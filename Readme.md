@@ -15,7 +15,7 @@ A simple project using database and PHP language. To use the project, it will be
 - [x] Confirmed creation
 - [x] Edit Product
 - [x] Delete Product
-- [ ] Export Products: .XLS
+- [x] Export Products: .XLS
 - [ ] Import Products: .XLS
 
 ## ✅ Requirements

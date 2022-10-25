@@ -14,4 +14,6 @@ $dbname = getenv('DB_NAME');
 $connection = new mysqli($host, $user, $password, $dbname, $port)
 or die ('Could not connect to the database server' . mysqli_connect_error());
 
+mysqli_set_charset($connection,"utf8");
+
 //$connection->close();

@@ -5,7 +5,7 @@
 include '../config/connection.php';
 
 $db = getenv('DB_NAME');
-$sql = "SELECT * FROM $db.products;";
+$sql = "SELECT * FROM $db.products ORDER BY created_at DESC";
 $query = mysqli_query($connection, $sql);
 ?>
 
@@ -25,6 +25,11 @@ $query = mysqli_query($connection, $sql);
                     <h1>Meus Produtos</h1>
                 </div>
                 <div class="col-5 text-right pt-2">
+                    <a target="_blank" href="<?php echo getenv('BASE_URL') . '/products/export.php' ?>">
+                        <button class="btn btn-secondary btn-lg">
+                            <i class="fa fa-download"></i>
+                        </button>
+                    </a>
                     <a href="<?php echo getenv('BASE_URL') . '/products/create.php' ?>">
                         <button class="btn btn-primary btn-lg">
                             Cadastrar
