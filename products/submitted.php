@@ -2,6 +2,16 @@
 
 <?php
 
+    /* .EnvHelper */
+    require_once "../app/Helpers/EnvHelper.php";
+    use EnvHelper\DotEnv;
+    (new DotEnv('../.env'))->load();
+
+    if(!$_POST || !$_POST['prod_code']) {
+        var_dump('eroo!');
+        header("Location: ". getenv('BASE_URL') . '/products');
+    }
+
     $prod_code = $_POST['prod_code'];
     $prod_name = $_POST['prod_name'];
     $prod_category = $_POST['prod_category'];
@@ -36,7 +46,7 @@
             <div class="col-12 text-center pt-5">
                 <div>
                     <a href="<?php echo getenv('BASE_URL') . '/products' ?>" class="pr-2">
-                        <button class="btn btn-primary btn-lg">
+                        <button class="btn btn-success btn-lg">
                             Listar produtos
                         </button>
                     </a>

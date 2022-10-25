@@ -13,8 +13,8 @@ A simple project using database and PHP language. To use the project, it will be
 - [x] Create Product
 - [x] Product List
 - [x] Confirmed creation
-- [ ] Edit Product
-- [ ] Delete Product
+- [x] Edit Product
+- [x] Delete Product
 - [ ] Export Products: .XLS
 - [ ] Import Products: .XLS
 

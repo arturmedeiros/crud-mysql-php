@@ -1,14 +1,14 @@
-<!-- PRODUCTS / Index -->
+<!-- PRODUCTS / Create -->
 
 <!-- Header -->
 <?php require '../resources/views/Header.php' ?>
 
 <!-- Dependencies -->
 <?php
-/* .EnvHelper */
-require_once "../app/Helpers/EnvHelper.php";
-use EnvHelper\DotEnv;
-(new DotEnv('../.env'))->load();
+    /* .EnvHelper */
+    require_once "../app/Helpers/EnvHelper.php";
+    use EnvHelper\DotEnv;
+    (new DotEnv('../.env'))->load();
 ?>
 
 <!-- Start - Container -->
@@ -28,7 +28,7 @@ use EnvHelper\DotEnv;
         <!-- End - Header -->
 
         <!-- Start - Form - Native Validation HTML 5 -->
-        <form action="<?php echo getenv('BASE_URL') . '/products/submit.php' ?>" method="post">
+        <form action="<?php echo getenv('BASE_URL') . '/products/submitted.php' ?>" method="post">
             <div class="form-row justify-content-center">
                 <!-- Start - Form Content -->
                 <div class="col-xs-12 col-sm-12 col-md-6">

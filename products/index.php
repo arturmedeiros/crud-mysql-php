@@ -1,19 +1,6 @@
 <!-- PRODUCTS / Index -->
 
-<!-- Header -->
-<?php require '../resources/views/Header.php' ?>
-
-<!-- Dependencies -->
-<?php
-/* .EnvHelper */
-require_once "../app/Helpers/EnvHelper.php";
-
-use EnvHelper\DotEnv;
-
-(new DotEnv('../.env'))->load();
-?>
-
-<!-- SQL Query - Get Products -->
+<!-- SQL Query - Get All Products -->
 <?php
 include '../config/connection.php';
 
@@ -21,6 +8,9 @@ $db = getenv('DB_NAME');
 $sql = "SELECT * FROM $db.products;";
 $query = mysqli_query($connection, $sql);
 ?>
+
+<!-- Header -->
+<?php require '../resources/views/Header.php' ?>
 
 <!-- Start - Container -->
 <div class="container">
@@ -52,18 +42,50 @@ $query = mysqli_query($connection, $sql);
                 <div class="col-xs-12 col-sm-12 col-md-12">
 
                     <!-- Start - Table Responsive -->
-                    <div class="table-responsive">
+                    <div class="table-responsive table-striped">
                         <table class="table">
                             <thead>
                             <tr>
-                                <!--                                <th scope="col">#ID</th>-->
-                                <th scope="col">Code</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Provider</th>
-                                <th scope="col">Created at</th>
-                                <th scope="col">Actions</th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        ID
+                                    </span>
+                                </th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        Code
+                                    </span>
+                                </th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        Name
+                                    </span>
+                                </th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        Category
+                                    </span>
+                                </th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        Quantity
+                                    </span>
+                                </th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        Provider
+                                    </span>
+                                </th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        Created at
+                                    </span>
+                                </th>
+                                <th scope="col">
+                                    <span class="px-2">
+                                        Actions
+                                    </span>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -77,16 +99,56 @@ $query = mysqli_query($connection, $sql);
                                 $category = $array['category'];
                                 $quantity = $array['quantity'];
                                 $provider = $array['provider'];
-                                $created_at = $array['created_at'];
+                                $created_at = date_format(date_create($array['created_at']),'d/m/Y à\s H:i');
                                 ?>
                                 <tr>
-                                    <td><?php echo $code ?></td>
-                                    <td><?php echo $name ?></td>
-                                    <td><?php echo $category ?></td>
-                                    <td><?php echo $quantity ?></td>
-                                    <td><?php echo $provider ?></td>
-                                    <td><?php echo "$created_at" ?></td>
-                                    <td>1 / 2</td>
+                                    <td>
+                                        <span class="px-2">
+                                            <?php echo $id ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="px-2">
+                                            <?php echo $code ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="px-2">
+                                            <?php echo $name ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="px-2">
+                                            <?php echo $category ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="px-2">
+                                            <?php echo $quantity ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="px-2">
+                                            <?php echo $provider ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="px-2">
+                                            <?php echo $created_at; ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="<?php echo getenv('BASE_URL') . '/products/edit.php?id=' . $id ?>">
+                                            <span class="px-2">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </span>
+                                        </a>
+                                        <a href="<?php echo getenv('BASE_URL') . '/products/delete.php?id=' . $id ?>">
+                                            <span class="px-2">
+                                                <i class="fa-solid fa-trash-can text-danger"></i>
+                                            </span>
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php } ?>
                             </tbody>
