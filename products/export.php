@@ -17,8 +17,7 @@ foreach ($query as $line) {
          'Categoria' => $line['category'],
          'Quantidade' => $line['quantity'],
          'Fornecedor' => $line['provider'],
-         //'Data de Cadastro' => date_format($line['created_at'], "Y/m/d H:i:s"),
-         'Data de Cadastro' => $line['created_at'],
+         'Data de Cadastro' => date_format(date_create($line['created_at']),'d/m/Y à\s H:i')
     ];
     $array[] = $data;
 }
