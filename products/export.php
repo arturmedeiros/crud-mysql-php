@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="utf-8">
-    <title>Download Excel</title>
-</head>
-<body>
 <?php
 
 require_once '../config/connection.php';
@@ -13,56 +6,62 @@ $db = getenv('DB_NAME');
 $sql = "SELECT * FROM $db.products ORDER BY created_at DESC";
 $query = mysqli_query($connection, $sql);
 
-$now = date('dmYHms');
-$file = 'products_'.$now.'.xls';
+/* Array Formatting */
+$array = [];
 
-// Cria cabeçalho
-$html = '';
-$html .= '<table>';
-$html .= '<thead>';
-$html .= '<tr>';
-$html .= '<th><b>ID</b></th>';
-$html .= '<th><b>Code</b></th>';
-$html .= '<td><b>Name</b></td>';
-$html .= '<td><b>Category</b></td>';
-$html .= '<td><b>Quantity</b></td>';
-$html .= '<td><b>Provider</b></td>';
-$html .= '<td><b>Created at</b></td>';
-$html .= '</tr>';
-$html .= '</thead>';
-
-// Cria linhas
-while($line = mysqli_fetch_assoc($query)){
-    $html .= '<tbody>';
-    $html .= '<tr>';
-    $html .= '<td>'.$line["id"].'</td>';
-    $html .= '<td>'.$line["code"].'</td>';
-    $html .= '<td>'.$line["name"].'</td>';
-    $html .= '<td>'.$line["category"].'</td>';
-    $html .= '<td>'.$line["quantity"].'</td>';
-    $html .= '<td>'.$line["provider"].'</td>';
-    $html .= '<td>'.date_format(date_create($line['created_at']),'d/m/Y à\s H:i').'</td>';
-    $html .= '</tr>';
-    $html .= '</tbody>';
-    ;
+foreach ($query as $line) {
+    $data = [
+         'ID' => $line['id'],
+         'Código' => $line['code'],
+         'Nome' => $line['name'],
+         'Categoria' => $line['category'],
+         'Quantidade' => $line['quantity'],
+         'Fornecedor' => $line['provider'],
+         //'Data de Cadastro' => date_format($line['created_at'], "Y/m/d H:i:s"),
+         'Data de Cadastro' => $line['created_at'],
+    ];
+    $array[] = $data;
 }
 
-$html .= '</table>';
+/* Headers to Download */
+function download_send_headers($filename) {
+    $now = gmdate("D, d M Y H:i:s");
+    header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+    header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
+    header("Last-Modified: {$now} GMT");
+    header("Content-Type: application/force-download");
+    header("Content-Type: application/octet-stream");
+    header("Content-Type: application/download");
+    header("Content-Disposition: attachment;filename={$filename}");
+    header("Content-Transfer-Encoding: binary");
+}
 
-// Gerar arquivo
-header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header ("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
-header ("Cache-Control: no-cache, must-revalidate");
-header ("Pragma: no-cache");
-header ("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header ("Content-Transfer-Encoding: binary");
-header ("Content-Disposition: attachment; filename=\"{$file}\"" );
-header ("Content-Description: PHP Generated Data" );
+/* Generate CSV File */
+function array2csv(array &$array)
+{
+    if (count($array) == 0) {
+        return null;
+    }
 
-// Envia o download ao navegador
-echo $html;
+    ob_start();
+    $df = fopen("php://output", 'w');
+
+    fputcsv($df, array_keys(reset($array)));
+
+    foreach ($array as $row) {
+        fputcsv($df, $row);
+    }
+
+    fclose($df);
+
+    return ob_get_clean();
+}
+
+/* Filename */
+$now = date('dmYHms');
+$file = 'products_'.$now.'.csv';
+
+/* Download CSV */
+download_send_headers($file);
+echo array2csv($array);
 exit;
-
-?>
-</body>
-</html>
