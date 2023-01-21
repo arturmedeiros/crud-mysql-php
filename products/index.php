@@ -1,12 +1,40 @@
-<!-- PRODUCTS / Index -->
-
-<!-- SQL Query - Get All Products -->
 <?php
 include '../config/connection.php';
+include '../products/export.php';
 
-$db = getenv('DB_NAME');
-$sql = "SELECT * FROM $db.products ORDER BY created_at DESC";
-$query = mysqli_query($connection, $sql);
+$db     = getenv('DB_NAME');
+$query  = "SELECT * FROM $db.products ORDER BY created_at DESC";
+$result = mysqli_query($connection, $query);
+$export = $_GET['export'] ?? 0;
+
+/**
+ * Export Report in CSV File
+ */
+if ($export == 1)
+{
+    /**
+     * Column headers.
+     * They refer to the column name of the database.
+     */
+    $headers = [
+        'id' => 'Produto ID',
+        'code' => 'Código',
+        'name' => 'Nome',
+        'category' => 'Categoria',
+        'quantity' => 'Quantidade',
+        'provider' => 'Fornecedor',
+        'created_at' => 'Data de Cadastro',
+    ];
+
+    /**
+     * Generate CSV file and force transfer.
+     */
+    downloadCSV(
+            $headers, // Headers
+            $result, // Data by Query
+            'My Report - CSV File' // Filename
+    );
+}
 ?>
 
 <!-- Header -->
@@ -25,7 +53,7 @@ $query = mysqli_query($connection, $sql);
                     <h1>Meus Produtos</h1>
                 </div>
                 <div class="col-5 text-right pt-2">
-                    <a target="_blank" href="<?php echo getenv('BASE_URL') . '/products/export.php' ?>">
+                    <a target="_blank" href="<?php echo getenv('BASE_URL') . '/products/index.php?export=1' ?>">
                         <button class="btn btn-secondary btn-lg">
                             <i class="fa fa-download"></i>
                         </button>
@@ -96,7 +124,7 @@ $query = mysqli_query($connection, $sql);
                             <tbody>
 
                             <?php
-                            while ($array = mysqli_fetch_array($query)) {
+                            while ($array = mysqli_fetch_array($result)) {
                                 /*var_dump($array);*/
                                 $id = $array['id'];
                                 $code = $array['code'];

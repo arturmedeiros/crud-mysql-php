@@ -1,29 +1,41 @@
 <?php
 
-require_once '../config/connection.php';
+/**
+ * Formats and forces the download of the CSV file.
+ * @param $headersCSV
+ * @param $contentCSV
+ * @param $fileName
+ * @return void
+ */
+function downloadCSV($headersCSV, $contentCSV, $fileName)
+{
+    $array = [];
 
-$db = getenv('DB_NAME');
-$sql = "SELECT * FROM $db.products ORDER BY created_at DESC";
-$query = mysqli_query($connection, $sql);
+    foreach ($contentCSV as $line) {
+        $data = [];
+        foreach ($headersCSV as $key => $value) {
+            $data[mb_strtoupper($value)] = $line[$key];
+        }
 
-/* Array Formatting */
-$array = [];
+        $array[] = $data;
+    }
 
-foreach ($query as $line) {
-    $data = [
-         'ID' => $line['id'],
-         'Código' => $line['code'],
-         'Nome' => $line['name'],
-         'Categoria' => $line['category'],
-         'Quantidade' => $line['quantity'],
-         'Fornecedor' => $line['provider'],
-         'Data de Cadastro' => date_format(date_create($line['created_at']),'d/m/Y à\s H:i')
-    ];
-    $array[] = $data;
+    // Filename
+    $now     = date('dmYHms');
+    $filename = $fileName . ' ' . $now . '.csv';
+
+    // Force CSV Download
+    headersToForceDownload($filename);
+    echo createCSV($array);
+    exit;
 }
 
-/* Headers to Download */
-function download_send_headers($filename) {
+/**
+ * Configure Headers to force CSV file download.
+ * @param $filename
+ * @return void
+ */
+function headersToForceDownload($filename) {
     $now = gmdate("D, d M Y H:i:s");
     header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
     header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
@@ -31,36 +43,36 @@ function download_send_headers($filename) {
     header("Content-Type: application/force-download");
     header("Content-Type: application/octet-stream");
     header("Content-Type: application/download");
+    header("Content-Type: application/csv");
     header("Content-Disposition: attachment;filename={$filename}");
     header("Content-Transfer-Encoding: binary");
 }
 
-/* Generate CSV File */
-function array2csv(array &$array)
+/**
+ * Generates CSV file based on Array.
+ * @param array $array
+ * @return false|string|null
+ */
+function createCSV(array &$array)
 {
     if (count($array) == 0) {
         return null;
     }
 
     ob_start();
-    $df = fopen("php://output", 'w');
 
-    fputcsv($df, array_keys(reset($array)));
+    $file = fopen("php://output", 'w');
+
+    fwrite($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+    fputcsv($file, array_keys(reset($array)), ";");
 
     foreach ($array as $row) {
-        fputcsv($df, $row);
+        $row = preg_replace('/(?<=^|;)"(.+)"(?=;)/','$1',$row);
+        fputcsv($file, $row, ";");
     }
 
-    fclose($df);
+    fclose($file);
 
     return ob_get_clean();
 }
-
-/* Filename */
-$now = date('dmYHms');
-$file = 'products_'.$now.'.csv';
-
-/* Download CSV */
-download_send_headers($file);
-echo array2csv($array);
-exit;
