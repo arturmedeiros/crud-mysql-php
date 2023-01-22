@@ -11,6 +11,8 @@ include '../products/import.php';
 
 // Variáveis
 $db = getenv('DB_NAME');
+
+// Inputs do Relatório
 $inputs = [
     'id', // 'Produto ID'
     'code', // 'Código'
@@ -21,7 +23,7 @@ $inputs = [
     'created_at', // 'Data de Cadastro'
 ];
 
-// Validação e geração do CSV
+// Validação do arquivo e upload
 if ($_FILES && $_FILES["file"]){
     $file = $_FILES["file"]["name"];
     $ext = pathinfo($file, PATHINFO_EXTENSION);

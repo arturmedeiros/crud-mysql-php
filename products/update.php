@@ -8,7 +8,7 @@
     (new DotEnv('../.env'))->load();
 
     if(!$_POST || !$_POST['prod_code']) {
-        var_dump('eroo!');
+        var_dump('Erro!');
         header("Location: ". getenv('BASE_URL') . '/products');
     }
 

@@ -53,6 +53,11 @@ if ($export == 1)
                     <h1>Meus Produtos</h1>
                 </div>
                 <div class="col-5 text-right pt-2">
+                    <a target="_self" href="<?php echo getenv('BASE_URL') . '/products/import_form.php' ?>">
+                        <button class="btn btn-secondary btn-lg">
+                            <i class="fa fa-upload"></i>
+                        </button>
+                    </a>
                     <a target="_blank" href="<?php echo getenv('BASE_URL') . '/products/index.php?export=1' ?>">
                         <button class="btn btn-secondary btn-lg">
                             <i class="fa fa-download"></i>
