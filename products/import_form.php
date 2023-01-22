@@ -9,7 +9,6 @@ use EnvHelper\DotEnv;
 include '../config/connection.php';
 include '../products/import.php';
 
-
 // Variáveis
 $db = getenv('DB_NAME');
 $inputs = [

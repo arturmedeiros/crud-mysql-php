@@ -41,8 +41,6 @@ function importCSV($db, $connection, $file, $headers = null) {
                     foreach ($arrayData as $line) {
                         saveToDBUpdateOrInsert($line, $connection, $db);
                     }
-
-                    echo "Record updated/created successfully";
                 }
             }
 
@@ -62,7 +60,6 @@ function importCSV($db, $connection, $file, $headers = null) {
  */
 function saveToDBUpdateOrInsert($data, $connection, $db): bool
 {
-
     // Check if the id already exists in the database
     $id = $data['id']; // $data['id'];
     $db_table = 'products';
@@ -86,9 +83,7 @@ function saveToDBUpdateOrInsert($data, $connection, $db): bool
             $set[] = "$column = '$value'";
         }
         $set = implode(', ', $set);
-        $query = printf(
-            "UPDATE $db.$db_table SET $set WHERE id = '$id';"
-        );
+        $query = "UPDATE $db.$db_table SET $set WHERE id = '$id';";
         $create = mysqli_query($connection, $query);
     }
 
@@ -101,7 +96,7 @@ function saveToDBUpdateOrInsert($data, $connection, $db): bool
     }
 }
 
-function saveToDB($data, $db) {
+/*function saveToDB($data, $db) {
     // Connect to database
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if ($conn->connect_error) {
@@ -118,9 +113,9 @@ function saveToDB($data, $db) {
     }
 
     $conn->close();
-}
+}*/
 
-function saveToDBNewID($data) {
+/*function saveToDBNewID($data) {
     // Connect to database
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if ($conn->connect_error) {
@@ -145,6 +140,6 @@ function saveToDBNewID($data) {
         echo "Record already exists";
     }
     $conn->close();
-}
+}*/
 
 
