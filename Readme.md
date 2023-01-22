@@ -6,7 +6,7 @@
 ## About
 A simple project using database and PHP language. To use the project, it will be necessary to create and configure the .env file
 
-## 🛠️ Project in progress
+## 🛠️ Project Done!
 - [x] Helper .env
 - [x] Readme
 - [x] MySQL Connection
@@ -15,8 +15,8 @@ A simple project using database and PHP language. To use the project, it will be
 - [x] Confirmed creation
 - [x] Edit Product
 - [x] Delete Product
-- [x] Export Products: .XLS
-- [ ] Import Products: .XLS
+- [x] Export Products: .CSV
+- [x] Import Products: .CSV
 
 ## ✅ Requirements
 To use the project, you need to have some packages and starter packages on your computer.
